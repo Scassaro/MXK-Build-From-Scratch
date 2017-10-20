@@ -20,10 +20,12 @@ Sub Main
 	End If
 	Loop
 	
-	' Determine Linkagg status
+	' Determine Linkagg status, and create Linkagg if needed
 	Dim Linkagg
 	Linkagg = MsgBox("Will this be a Linkagged device?", vbYesNo, "Linkagg Status")
-	
+	If Linkagg = 6 Then
+		CreateLinkagg(MXKType)
+	End If
 	
 	strNumber = Wscript.StdIn.ReadLine
 	ipaddress = UserInput ("What IP Address would you like for this MXK?")
@@ -36,8 +38,21 @@ Sub Main
 
 End Sub
 
-Sub DetermineParameters
-	
-	
+Sub CreateLinkagg(MXKType)
+
+	If MXKType = "MXK" Then
+		crt.Screen.Send "linkagg add group one/linkagg link 1-a-2-0/eth mode active" & chr(13)
+		crt.Screen.WaitForString "zSH>"
+	ElseIf MXKType = "MXK-F" Then
+		crt.Screen.Send "linkagg add group one/linkagg link 1-a-6-0/eth mode active" & chr(13)
+		crt.Screen.WaitForString "zSH>"
+	Else
+		crt.Screen.Send "linkagg add group one/linkagg link 1-1-101-0/eth mode active" & chr(13)
+		crt.Screen.WaitForString "zSH>"
+	End If
+
+End Sub
+
+Sub BuildUplink
 
 End Sub
