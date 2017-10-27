@@ -31,17 +31,17 @@ Sub LoginAndInitialize
 	crt.Screen.WaitForString "zSH>"
 	
 	'Detemine MXK type to choose commands correctly.
-	'TODO: Make this a three button system?
 	
+	Dim ButtonResponse
 	Dim MXKType
-	Do While MXKType <> "219" OR MXKType <> "MXK" OR MXKType <> "MXK-F"
-		MXKType = InputBox("Is this a MXK, MXK-F, or a 219?", "MXK Type")
-		If MXKType = "219" OR MXKType = "MXK" OR MXKType = "MXK-F" then
-			Exit Do
-		Else
-			MsgBox("Error: Not a valid type of MXK system!")	
-		End If
-	Loop
+	ButtonResponse = MsgBox("What type of MXK is this? (Abort = MXK, Retry = F, Ignore = 219)", vbAbortRetryIgnore, "MXK Type")
+	If ButtonResponse = 3 Then
+		MXKType = "MXK"
+	Else If ButtonResponse = 4 Then
+		MXKType = "MXK-F" 
+	Else	
+		MXKType = "219"
+	End If
 	
 	'Add all cards, as the 219 cannot be set up without at least one line card
 	
@@ -152,7 +152,7 @@ Sub CreateRouting(ByVal MXKType, ByVal ChosenVlan)
 	Dim ChosenIPAddress
 	ChosenIPAddress = InputBox("What IP Address do you want for this MXK?", "IP Address")
 	If MXKType = "MXK" Then
-		crt.Screen.Send "interface add 1-a-6-0/ipobridge vlan " & ChosenVlan & " " & ChosenIPAddress & "/24" & chr(13)
+		crt.Screen.Send "interface add 1-a-3-0/ipobridge vlan " & ChosenVlan & " " & ChosenIPAddress & "/24" & chr(13)
 	Else
 		crt.Screen.Send "interface add 1-m1-6-0/ipobridge vlan " & ChosenVlan & " " & ChosenIPAddress & "/24" & chr(13)
 	End If
